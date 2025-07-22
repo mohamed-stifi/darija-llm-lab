@@ -1,0 +1,15 @@
+[project]
+name = "darija-llm-lab"
+version = "0.1.0"
+description = "Fine-tuning and evaluating LLMs for Moroccan Darija. From small to large models, this project aims to improve Darija NLP, contribute open tools, and explore future research directions."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "accelerate>=1.9.0",
+    "bitsandbytes>=0.46.1",
+    "datasets>=4.0.0",
+    "peft>=0.16.0",
+    "timm>=1.0.17",
+    "transformers>=4.53.3",
+    "trl==0.14.0",
+]
