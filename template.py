@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s]: %(message)s:')
 
 
-project_name = "textTo3DModelGen"
+project_name = "darija_llm_lab"
 
 list_of_files = [
     ".github/workflows/.gitkeep",
