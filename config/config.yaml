@@ -1,0 +1,56 @@
+artifacts_root: artifacts
+
+data_ingestion:
+    datasets: [
+                {
+                    'strategy_type': 'darija_pattern',
+                    'path':  "./data/DarijaPattern.txt",
+                    'name': 'Darija Pattern Dataset'
+                },
+                {
+                    'strategy_type': 'audio_data',
+                    'path': "./data/audio_data.csv",
+                    'name': 'Audio Transcriptions'
+                },
+                {
+                    'strategy_type': 'wikipedia_darija',
+                    'path':  "AbderrahmanSkiredj1/moroccan_darija_wikipedia_dataset"
+                },
+                {
+                    'strategy_type': 'doda_audio',
+                    'path': "atlasia/DODa-audio-dataset",
+                    'name': 'DODA Audio Dataset'
+                },
+                {
+                    'strategy_type': 'filtered_samples',
+                    'path': "medmac01/filtered_samples",
+                    'name': 'Filtered Samples Transcriptions'
+                },
+                {
+                    'strategy_type': 'iadd_darija',
+                    'path': "AbderrahmanSkiredj1/IADD_darija_sentences"
+                },
+                {
+                    'strategy_type': 'openai_gsm8k_darija',
+                    'path': "AbderrahmanSkiredj1/openai_gsm8k_test_darija",
+                    'name': 'Openai Gsm8k Dataset'
+                },
+                {
+                    'strategy_type': 'darija_banking',
+                    'path': "AbderrahmanSkiredj1/DarijaBanking",
+                    'name': 'Darija Banking Dataset'
+                }
+            ]
+
+    output_path: 'artifacts/data_ingestion'
+    combined_filename: 'darija_combined_dataset.json'
+    metadata_filename: 'darija_metadata.json'
+    save_individual_datasets: False
+    remove_duplicates: True
+    min_text_length: 10
+    # Hugging Face configuration
+    push_to_hub: True
+    hub_dataset_name: 'darija-combined-dataset'
+    hub_organization: 'mohamed-stifi'  # Optional
+    hub_private: False
+    #hub_token: None  # use .env file and load_dotenv
