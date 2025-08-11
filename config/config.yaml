@@ -1,5 +1,7 @@
 artifacts_root: artifacts
 
+new_tokens_file: "configs/new_tokens.json"
+
 data_ingestion:
     datasets: [
                 {
@@ -54,3 +56,97 @@ data_ingestion:
     hub_organization: 'mohamed-stifi'  # Optional
     hub_private: False
     #hub_token: None  # use .env file and load_dotenv
+
+
+
+
+# Base Model Configuration 
+model_config:
+  base_model_id: "unsloth/gemma-3n-E2B-it"
+  max_seq_length: 1024
+  load_in_4bit: true
+
+# --- Stage A: Domain-Adapted Pre-training (DAPT) ---
+dapt_config:
+  # Path where the adapted model will be saved
+  output_model_path: "artifacts/models/gemma-3n-E2B-it-darija-adapted"
+  
+  # Data for DAPT
+  data:
+    dataset_id: "mohamed-stifi/darija-combined-dataset"
+    text_column: "text"
+    debug_mode: true
+    debug_split_size: 5000
+
+  # Trainer settings for DAPT
+  trainer:
+    output_dir: "artifacts/dapt_training_results"
+    per_device_train_batch_size: 8
+    gradient_accumulation_steps: 8
+    max_steps: 200
+    learning_rate: 0.000005 # 5e-6 is a common starting point for full-parameter tuning
+    logging_steps: 10
+    save_steps: 50
+    warmup_steps: 20
+    seed: 3407
+    optim: "adamw_torch"
+    weight_decay: 0.01
+
+# --- Stage B: Supervised Fine-Tuning (SFT) ---
+sft_config:
+  # Path to load the DAPT-adapted model from. Should match dapt_config.output_model_path
+  input_model_path: "artifacts/models/gemma-3n-E2B-it-darija-adapted"
+  # Path to save the final SFT adapters
+  output_adapters_path: "artifacts/sft_adapters"
+
+  # Data for SFT
+  data:
+    dataset_id: "MBZUAI-Paris/Darija-SFT-Mixture"
+    test_size: 0.1
+    seed: 1234
+    debug_mode: true
+    debug_split_size: 3000
+
+  # PEFT/LoRA configuration for SFT
+  peft:
+    r: 16
+    lora_alpha: 16
+    lora_dropout: 0.05
+    bias: "none"
+    random_state: 3407
+    target_modules: ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+
+  # Trainer settings for SFT
+  trainer:
+    output_dir: "artifacts/sft_training_results"
+    per_device_train_batch_size: 10
+    gradient_accumulation_steps: 10
+    eval_strategy: "steps"
+    eval_steps: 10
+    save_strategy: "steps"
+    save_steps: 30
+    warmup_steps: 10
+    max_steps: 100
+    learning_rate: 0.00002 # 2e-5 is a common starting point for LoRA
+    logging_steps: 5
+    seed: 3407
+    metric_for_best_model: "eval_loss"
+    load_best_model_at_end: true
+    greater_is_better: false
+    early_stopping_patience: 3
+    optim: "adamw_torch"
+    weight_decay: 0.01
+
+# --- Experiment Tracking and Tuning ---
+wandb_config:
+  project: "darija-gemma-finetuning"
+  entity: null # Your wandb username or team name
+
+optuna_config:
+  # Tuning is performed per-stage (e.g., `python tune.py --stage dapt`)
+  dapt_n_trials: 10
+  sft_n_trials: 20
+  storage: "sqlite:///gemma_tuning.db"
+
+
+

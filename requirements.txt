@@ -10,3 +10,17 @@ transformers
 python-box
 matplotlib
 seaborn
+
+unsloth
+torch
+xformers
+triton
+cut-cross-entropy
+sentencepiece
+protobuf
+huggingface_hub>=0.34.0
+hf_transfer
+pyyaml
+optuna
+wandb
+

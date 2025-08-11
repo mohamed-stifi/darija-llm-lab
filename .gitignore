@@ -196,4 +196,4 @@ cython_debug/
 .darija-env
 data
 artifacts
-notebooks/darija_gemma_3n_tokenizer
+notebook/darija_gemma_3n_tokenizer

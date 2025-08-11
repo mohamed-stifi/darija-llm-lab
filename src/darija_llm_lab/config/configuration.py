@@ -4,8 +4,8 @@ from pathlib import Path
 import yaml
 from darija_llm_lab.constants import CONFIG_PATH
 from darija_llm_lab.components.data_ingestion.dataset_factory import DatasetStrategyFactory
-from darija_llm_lab.entity.entity import DataIngestionConfig
-from darija_llm_lab.utils.utils import create_directories, read_yaml
+from darija_llm_lab.entity.config_entity import DataIngestionConfig
+from darija_llm_lab.utils.common import create_directories, read_yaml
 
 
 class ConfigurationManager:

@@ -1,4 +1,4 @@
-from darija_llm_lab.entity.entity import DataIngestionConfig, DatasetInfo, DataIngestionEntity
+from darija_llm_lab.entity.config_entity import DataIngestionConfig, DatasetInfo, DataIngestionEntity
 from darija_llm_lab.components.data_ingestion.dataset_factory import DatasetStrategyFactory
 import logging
 from typing import List, Any, Dict, Optional, Tuple
