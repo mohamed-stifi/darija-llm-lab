@@ -8,10 +8,11 @@ from darija_llm_lab.entity.config_entity import ModelConfig, SFTPEFTConfig
 from darija_llm_lab.utils.common import print_trainable_parameters
 
 class ModelLoader:
-    def __init__(self, config: ModelConfig):
+    def __init__(self, config: ModelConfig, new_tokens: list):
         self.config = config
         self.model = None
         self.tokenizer = None
+        self.new_tokens = new_tokens
 
     def load_model_and_tokenizer(self, model_path: str = None):
         """Loads model and tokenizer from HF hub or a local path."""
@@ -42,7 +43,7 @@ class ModelLoader:
         lm_head = self.model.get_output_embeddings()
         
         text_boundary_idx = self.model.config.boi_token_id
-        num_new_tokens = len(self.surgery_config.new_special_tokens)
+        num_new_tokens = len(self.new_tokens)
         new_vocab_size = original_vocab_size + num_new_tokens
         
         print(f"Adding {num_new_tokens} new tokens. New vocabulary size will be: {new_vocab_size}")
@@ -116,7 +117,7 @@ class ModelLoader:
             if token_id < boundary_idx:
                 new_vocab[token] = token_id
         
-        for i, token in enumerate(self.surgery_config.new_special_tokens):
+        for i, token in enumerate(self.new_tokens):
             new_vocab[token] = boundary_idx + i
         
         for token, token_id in original_vocab.items():
@@ -124,7 +125,7 @@ class ModelLoader:
                 new_vocab[token] = token_id + num_new
 
         tokenizer_data['model']['vocab'] = new_vocab
-        for i, token in enumerate(self.surgery_config.new_special_tokens):
+        for i, token in enumerate(self.new_tokens):
             tokenizer_data['added_tokens'].append({
                 "id": boundary_idx + i, "content": token, "single_word": False,
                 "lstrip": False, "rstrip": False, "normalized": False, "special": False
