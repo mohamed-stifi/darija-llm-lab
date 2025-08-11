@@ -13,21 +13,21 @@ class DataIngestion:
         dataset = load_dataset(config.dataset_id, split=split)
         
         # If a Processor (e.g., Gemma3nProcessor) was passed, use its .tokenizer
-        tok = getattr(tokenizer, "tokenizer", tokenizer)
+        # tok = getattr(tokenizer, "tokenizer", tokenizer)
 
         # Safely get model_max_length; let HF handle default if missing/None
-        max_len = getattr(tok, "model_max_length", None)
+        # max_len = getattr(tok, "model_max_length", None)
 
-        def tokenize_function(examples):
+        '''def tokenize_function(examples):
             return tok(
                 examples[config.text_column],
                 truncation=True,
                 max_length=max_len,   # ok if None; HF will use default
-            )
+            )'''
         
-        tokenized_dataset = dataset.map(tokenize_function, batched=True, remove_columns=dataset.column_names)
-        print(f"DAPT dataset size: {len(tokenized_dataset)}")
-        return tokenized_dataset
+        # tokenized_dataset = dataset.map(tokenize_function, batched=True, remove_columns=dataset.column_names)
+        # print(f"DAPT dataset size: {len(tokenized_dataset)}")
+        return dataset
     
     def load_sft_dataset(self,config: SFTDataConfig, tokenizer):
         """Loads, splits, filters, and formats the dataset."""
