@@ -134,7 +134,7 @@ def load_json(path_to_json: Path) -> dict:
         return json.load(json_file)
 
 class ConfigurationManager:
-    def __init__(self, config_filepath="configs/config.yaml"):
+    def __init__(self, config_filepath="config/config.yaml"):
         self.config = read_yaml(Path(config_filepath))
         os.makedirs(self.config.artifacts_root, exist_ok=True)
         self.new_tokens = load_json(Path(self.config.new_tokens_file))['new_special_tokens']
@@ -147,7 +147,7 @@ class ConfigurationManager:
         return ce.DAPTConfig(
             output_model_path=Path(cfg.output_model_path),
             data=ce.DAPTDataConfig(**cfg.data),
-            trainer=ce.DAPTTrainerConfig(output_dir=Path(cfg.trainer.output_dir), **cfg.trainer)
+            trainer=ce.DAPTTrainerConfig(**cfg.trainer)  ## output_dir=Path(cfg.trainer.output_dir)
         )
 
     def get_sft_config(self) -> ce.SFTConfig:
@@ -157,7 +157,7 @@ class ConfigurationManager:
             output_adapters_path=Path(cfg.output_adapters_path),
             data=ce.SFTDataConfig(**cfg.data),
             peft=ce.SFTPEFTConfig(**cfg.peft),
-            trainer=ce.SFTTrainerConfig(output_dir=Path(cfg.trainer.output_dir), **cfg.trainer)
+            trainer=ce.SFTTrainerConfig(**cfg.trainer) #output_dir=Path(cfg.trainer.output_dir)
         )
 
     def get_wandb_config(self) -> ce.WandbConfig:

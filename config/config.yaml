@@ -1,6 +1,6 @@
 artifacts_root: artifacts
 
-new_tokens_file: "configs/new_tokens.json"
+new_tokens_file: "config/new_tokens.json"
 
 data_ingestion:
     datasets: [
