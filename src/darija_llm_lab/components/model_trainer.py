@@ -1,6 +1,6 @@
 import torch
 import transformers
-from trl import SFTTrainer, SFTConfig, Trainer, TrainingArguments
+from trl import SFTTrainer, SFTConfig
 from unsloth.chat_templates import train_on_responses_only
 
 class ModelTrainer:
