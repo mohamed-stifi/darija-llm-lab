@@ -15,9 +15,9 @@ class DAPTPipeline:
         new_tokens = self.config_manager.new_tokens
 
         # 2. Load and prepare model
-        model_loader = ModelLoader(model_cfg)
+        model_loader = ModelLoader(model_cfg, new_tokens)
         model, tokenizer = model_loader.load_model_and_tokenizer()
-        model, tokenizer = model_loader.perform_embedding_surgery(new_tokens)
+        model, tokenizer = model_loader.perform_embedding_surgery()
         model = model_loader.prepare_model_for_dapt()
 
         # 3. Load data

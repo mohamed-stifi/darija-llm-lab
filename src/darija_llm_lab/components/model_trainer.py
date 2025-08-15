@@ -79,7 +79,7 @@ class ModelTrainer:
                 
                 lr_scheduler_type = "linear",
                 seed = 3407,
-                report_to = "none", # Use this for WandB etc
+                
 
                 ### For EarlyStopping :
                 bf16 = torch.cuda.is_bf16_supported(),
