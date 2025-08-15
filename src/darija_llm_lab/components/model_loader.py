@@ -154,7 +154,7 @@ class ModelLoader:
         if hasattr(self.model, 'lm_head'):
             self.model.lm_head.weight.requires_grad = True'''
         
-        self.model = FastModel.get_peft_self.model(
+        self.model = FastModel.get_peft_model(
             self.model,
             finetune_vision_layers     = False, # Turn off for just text!
             finetune_language_layers   = False,  # Should leave on!
@@ -174,10 +174,10 @@ class ModelLoader:
 
         self.model.print_trainable_parameters()
 
-        self.model.base_self.model.self.model.self.model.language_self.model.embed_tokens.weight.to(
-            dtype = self.model.base_self.model.self.model.lm_head.lora_A.default.weight.dtype)
+        self.model.base_model.model.model.language_model.embed_tokens.weight.to(
+            dtype = self.model.base_model.model.lm_head.lora_A.default.weight.dtype)
 
-        self.model.base_self.model.self.model.self.model.language_self.model.embed_tokens.weight.requires_grad = True
+        self.model.base_model.model.model.language_model.embed_tokens.weight.requires_grad = True
         self.model.print_trainable_parameters()
         
         # Verify trainable parameters
