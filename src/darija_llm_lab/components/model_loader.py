@@ -141,7 +141,7 @@ class ModelLoader:
     def prepare_model_for_dapt(self):
         """Freezes all layers except the token embeddings and lm_head for DAPT."""
         print("--- Preparing model for DAPT (training embeddings and lm_head) ---")
-        for param in self.model.parameters():
+        '''for param in self.model.parameters():
             param.requires_grad = False
         
         # Unfreeze input embeddings
@@ -152,10 +152,41 @@ class ModelLoader:
 
         # Unfreeze output embeddings (lm_head)
         if hasattr(self.model, 'lm_head'):
-            self.model.lm_head.weight.requires_grad = True
+            self.model.lm_head.weight.requires_grad = True'''
+        
+        self.model = FastModel.get_peft_self.model(
+            self.model,
+            finetune_vision_layers     = False, # Turn off for just text!
+            finetune_language_layers   = False,  # Should leave on!
+            finetune_attention_modules = False,  # Attention good for GRPO
+            finetune_mlp_modules       = False,  # Should leave on always!
 
-        print_trainable_parameters(self.model)
+            r = 8,           # Larger = higher accuracy, but might overfit
+            lora_alpha = 8,  # Recommended alpha == r at least
+            lora_dropout = 0,
+            bias = "none",
+            random_state = 3407,
+            target_modules=["lm_head"],
+            
+            modules_to_save = ["embed_tokens"]
+        )
+
+
+        self.model.print_trainable_parameters()
+
+        self.model.base_self.model.self.model.self.model.language_self.model.embed_tokens.weight.to(
+            dtype = self.model.base_self.model.self.model.lm_head.lora_A.default.weight.dtype)
+
+        self.model.base_self.model.self.model.self.model.language_self.model.embed_tokens.weight.requires_grad = True
+        self.model.print_trainable_parameters()
+        
+        # Verify trainable parameters
+        print("\nTrainable parameters:")
+        for name, param in self.model.named_parameters():
+            if param.requires_grad:
+                print(name)
         return self.model
+        
 
     def apply_sft_peft(self, peft_config: SFTPEFTConfig):
         """Applies LoRA adapters to the model for SFT."""
