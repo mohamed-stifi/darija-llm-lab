@@ -32,7 +32,7 @@ class ModelTrainer:
             fp16=not torch.cuda.is_bf16_supported(),
             report_to="wandb",
             # metric_for_best_model = "eval_loss",   # or any metric you're computing
-            load_best_model_at_end = True,
+            # load_best_model_at_end = True,
             # greater_is_better = False, 
         )
 
