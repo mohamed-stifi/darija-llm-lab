@@ -203,7 +203,7 @@ class ModelLoader:
             lora_alpha=peft_config.lora_alpha,
             lora_dropout=peft_config.lora_dropout,
             bias=peft_config.bias,
-            target_modules=peft_config.target_modules,
+            # target_modules=peft_config.target_modules,
             random_state=peft_config.random_state,
         )
         print_trainable_parameters(self.model)
